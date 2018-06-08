@@ -18,6 +18,7 @@
           if(data["error"]){
             console.log("Error present");
             console.log(data["error_message"]);
+            $(".error-message").text(data["error_message"]);
           }
           else{
             console.log("No error present");
@@ -46,7 +47,9 @@
       <input type="password" id="pass" name="password" placeholder="Enter Password">
       <br><br>
       <button class="submit">Login</button>
-      <center><a href="#">Forgot Password?</a><br><a href="#">Create Account</a></center>
+      <center><a href="#">Forgot Password?</a><br><a href="signup.html">Create Account</a></center>
+      <br><br>
+      <center><div class="error-message"></div></center>
 </div>
 </body>
 </html>
