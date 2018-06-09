@@ -1,27 +1,63 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="utf-8">
   <title>Sign-up Page</title>
-  <link rel="stylesheet" type="text/css" href="home.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+  <!-- <link rel="stylesheet" type="text/css" href="home.css"> -->
   <link rel="stylesheet" type="text/css" href="sign-up.css">
+  <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
+  <nav class="navbar navbar-dark bg-dark navbar-expand-lg justify-content-center">
+    <a class="navbar-brand heading" href="#">EduGame</a>
+  </nav>
+  <div class="container text-center my-4 h1 text-dark">Have fun learning!</div>
+  <div class="container text-center mt-3 h3 text-secondary">Sign Up</div>
+
   <div class="SignUp">
-     <!-- <img src="avatar.jpg" alt="Avatar" class="avatar"> -->
-<form action="/action_page.php">
-  <p>First name:</p>
-  <input type="text" name="Firstname" placeholder="Enter Firstname">
-  <p>Last name:</p>
-  <input type="text" name="Lastname" placeholder="Enter Lastname">
-  <p>Gender:</p>
-      <input type="radio" name="sex" value="male" style="display: inline-block;">Male
-      <input type="radio" name="sex" value="female">Female
-  <p>Password:</p>
-  <input type="password" name="Password" placeholder=" Enter Password">
-  <p>Confirm Password:</p>
-  <input type="password" name="Confirmpassword" placeholder="Confirmpassword"><br><br>
-  <input type="submit" value="Sign-up">
-  </form>
-</div>
+    <div class="container">
+      <form id="sign-up-form">
+
+        <div class="form-group form-row">
+          <div class="col">
+            <label class="form-label" for="firstname-text">First Name</label>
+            <input type="text" class="form-control col" id="firstname-text" name="Firstname" placeholder="First Name" required>
+          </div>
+          <div class="col">
+            <label for="firstname-text">Last Name</label>
+            <input type="text" id="lastname-text" class="form-control col" name="Lastname" placeholder="Last Name" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="email-text">Email</label>
+          <input class="form-control" type="text" name="email" placeholder="Email" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="password-text">Password</label>
+          <input type="password" id="password-text" class="form-control" name="password" placeholder="New Password" required>
+        </div>
+        
+        <input class="btn submit-btn" type="submit" value="Sign-up">
+      </form>
+    </div>
+  </div>
+    
+
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+<script src="jquery-validation-1.17.0/dist/jquery.validate.js"></script>
+<script type="text/javascript">
+
+  $(document).ready(() => {
+    $("#sign-up-form").validate();
+  });
+
+</script>
 </body>
 </html>
