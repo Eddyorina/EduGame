@@ -6,8 +6,8 @@ class Login {
 
 	function __construct() {
 		require_once "connection.php";
-		$register = new Connect();
-		$this->connect = $register->connectToDB();
+		$register = new Connection();
+		$this->connect = $register->getConnection();
 	}
 
 	public function checkCredentials($email, $password){

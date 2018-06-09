@@ -5,9 +5,9 @@ define("DB_USER", "root");
 define("DB_PASS", "");
 define("DB_DATABASE", "edugame");
 
-class Connect {
+class Connection {
 
-	public function connectToDB() {
+	public function getConnection() {
 		return new mysqli(DB_HOST, DB_USER, DB_PASS, DB_DATABASE);
 	}
 }
