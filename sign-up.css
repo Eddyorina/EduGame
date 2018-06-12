@@ -1,0 +1,71 @@
+ body {
+    /*background-image: url("dee.jpg");*/
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-attachment: fixed;
+    background-position: 100% 100%;
+    font-family: Tahoma;
+    font-style: normal;
+    margin: 0px;
+    padding: 0;
+    color: black;
+ 
+}
+
+.SignUp
+{
+    width: 400px;
+    margin: 40px auto;
+    /*height: 550px;*/
+    /*background: #b3b3b3; */
+    /*color: #663300;*/
+    /*top: 50%;*/
+    /*left: 50%;*/
+    /*position: absolute;*/
+    /*transform: translate(-50%,-50%);*/
+    /*box-sizing: border-box;*/
+}
+
+.SignUp p{
+    font-weight: bold;
+}
+.SignUp input{
+    width: 100%;
+    margin-bottom: 2px;
+}
+
+
+/*.SignUp input[type=text], input[type=password] {
+    width: 100%;
+    height: 25px;
+    background: transparent;
+    display: inline-block;
+    outline: none;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    font-size: 16px; 
+}*/
+
+/*.SignUp input[type="submit"]{
+ border: none;
+ border-radius:20px;
+ height: 40px;
+ color: red;
+ background: black;
+ font-size: 18px;
+} 
+
+.SignUp input[type="submit"]:hover{
+    cursor: pointer;
+    background: #d9d9d9;
+    color: #006644;
+}*/
+
+
+
+
+
+
+
+
+

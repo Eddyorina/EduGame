@@ -2,22 +2,54 @@
 <html>
 <head>
 <title>LoginPage</title>
+<meta charset="utf-8">
+<script src="jquery-3.3.1.js"></script>
+<script type="text/javascript">
+
+  $(document).ready(() => {
+    
+    $(".submit").on("click", () => {
+      var _email = $("#email").val();
+      var _password = $("#pass").val();
+
+      $.post("server/login.php",
+        {email: _email, password: _password},
+        (data, textStatus, jqXHR) => {
+          if(data["error"]){
+            console.log("Error present");
+            console.log(data["error_message"]);
+            $(".error-message").text(data["error_message"]);
+          }
+          else{
+            console.log("No error present");
+            window.location.href = "catalog.html";
+          }
+        }, "json");
+    });
+
+  });
+
+
+</script>
 <link rel="stylesheet" type="text/css" href="home.css">
 </head>
 <body>
 
+  <center><div class="heading">EduGame</div></center>
+
 <div class="login">
-    <img src="avatar.jpg" alt="Avatar" class="avatar">
-    <h1>Login Here</h1> 
-  <form action="/action_page.php">
-      <p>Username</p>
-      <input type="text" placeholder="Enter Username">
-      <p>Password</p>
-      <input type="password" placeholder="Enter Password">
-      <input type="submit" value="Login">
-      <a href="#">Forgot Password?</a>
-      <a href="#">Create Account</a>
-  </form>
+    <!-- <img src="Media/avatar.jpg" alt="Avatar" class="avatar"> -->
+    <h1>Login</h1>
+      <span>Email</span>
+      <input type="text" id="email" name="email" placeholder="Enter email">
+      <br><br>
+      <span>Password</span>
+      <input type="password" id="pass" name="password" placeholder="Enter Password">
+      <br><br>
+      <button class="submit">Login</button>
+      <center><a href="#">Forgot Password?</a><br><a href="signup.html">Create Account</a></center>
+      <br><br>
+      <center><div class="error-message"></div></center>
 </div>
 </body>
 </html>
