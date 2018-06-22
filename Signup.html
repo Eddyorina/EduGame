@@ -30,8 +30,8 @@
         </div>
 
         <div class="form-group">
-          <label class="form-label" for="email-text">Email</label>
-          <input class="form-control" id="email-text" type="email" name="email" placeholder="Email" required>
+          <label class="form-label" for="emailText">Email</label>
+          <input class="form-control" id="emailText" type="email" name="email" placeholder="Email" required>
         </div>
 
         <div class="form-group">
@@ -52,29 +52,52 @@
 <script src="jquery-validation-1.17.0/dist/jquery.validate.js"></script>
 
 <script type="text/javascript">
+  var emailIsUnique = false;
 
   $(document).ready(() => {
-    $("#sign-up-form").validate({submitHandler: submitForm});
 
-    $("#email-text").on("keyup", () => {
-      console.log("key pressed");
-      $.ajax({
-        url: "server/email-check.php",
-        method: "POST",
-        data: {email: $("#email-text").val()},
-        success: (data, textStatus, jqXHR) => {
-          if(data["error"])
-            console.log(data["error_message"]);
-          else
-            console.log("is unique");
-        },
-        error: (jqXHR, textStatus, errorThrown) => {
-          console.log(errorThrown);
-        },
-        dataType: "json"
-      });
+    $.validator.addMethod("emailCheck", (value, element) => {
+      return false;
+    }, "Email already exists in records. It should be unique");
+    $("#sign-up-form").validate({
+      rules : { 
+        emailText : { emailCheck: true }
+      },
+      submitHandler: submitForm});
+
+    $("#emailText").on("keyup", () => {
+      if(regexMatch($("#emailText").val())){
+        console.log("Regex match");
+        // isEmailUnique($("#email-text").val());
+      } else
+        console.log("No match");
     });
   });
+
+  //Checks with database whether email is unique.
+  function isEmailUnique(email){
+    $.ajax({
+      url: "server/email-check.php",
+      method: "POST",
+      data: {email: $("#emailText").val()},
+      success: (data, textStatus, jqXHR) => {
+        if(data["error"]){
+          console.log(data["error_message"]);
+          emailIsUnique = false;
+          // return false;
+        }
+        else{
+          console.log("is unique");
+          emailIsUnique = true;
+          // return true;
+        }
+      },
+      error: (jqXHR, textStatus, errorThrown) => {
+        console.log(errorThrown);
+      },
+      dataType: "json"
+    });
+  }
 
   function submitForm() {
     var _data = $("#sign-up-form").serialize()
@@ -90,6 +113,11 @@
       },
       dataType: "json"
       });
+  }
+
+  function regexMatch(email){
+    var email_regex = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+    return email_regex.test(email);
   }
 
 </script>

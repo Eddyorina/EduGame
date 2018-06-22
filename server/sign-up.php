@@ -9,8 +9,8 @@ if(isset($_POST["firstname"]) &&
 {
 	$signup = new SignUP();
 	$signup->emailUnique($_POST["email"]);
-	echo "bleble";
 } else {
+	//replace below code
 	echo "parameter not set";
 }
 
