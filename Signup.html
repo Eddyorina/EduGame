@@ -70,12 +70,12 @@
         },
         "Email already exists in records. It should be unique"
     );
-
+   /* 
     var emailCheckFunc = async (value, element) => {
       await isEmailUnique();
       console.log("ble");
       return false;
-    }
+    } */
 
     $("#sign-up-form").validate(
     {
@@ -125,7 +125,13 @@
       method: "POST",
       data: _data,
       success: (data, textStatus, jqXHR) => {
-        console.log("lala");
+        if(!data["error"]){
+          localStorage.setItem("useremail", $("#emailText").val());
+          localStorage.setItem("firstname", $("#firstname-text").val());
+          localStorage.setItem("lastname", $("#lastname-text").val());
+          console.log($("#lastname-text").val());
+          window.location.replace("catalog.html");
+        }
       },
       error: (jqXHR, textStatus, errorThrown) => {
         console.log(errorThrown);
