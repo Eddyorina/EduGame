@@ -8,7 +8,7 @@ class SignUp {
 		$this->connection = (new Connection())->getConnection();
 	}
 
-	function register($firstname, $lastname, $email, $password){
+	/* function register($firstname, $lastname, $email, $password){
 		$hashed_password = password_hash($password);
 
 		if (emailUnique($email)){
@@ -20,6 +20,30 @@ class SignUp {
 			// $response["error"] = ""
 		}
 
+	} */
+
+	function register($email, $firstname, $lastname, $password){
+		$hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
+		$sql = "INSERT INTO users(email, firstname, lastname, password) VALUES(?,?,?,?)";
+		
+		if($query = $this->connection->prepare($sql)){
+			$query->bind_param("ssss", $email, $firstname, $lastname, $hashed_password);
+			if($query->execute()){
+				$response["error"] = false;
+				echo json_encode($response);
+			} else {
+				$response["error"] = true;
+				$response["error_message"] = "Execution issues";
+				echo json_encode($response);
+			}
+		} else {
+			$response["error"] = true;
+			$response["error_message"] = "Querying issues";
+			echo json_encode($response);
+		}
+			
+		
 	}
 
 	public function emailUnique($email){
