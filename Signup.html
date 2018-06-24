@@ -32,7 +32,7 @@
 
         <div class="form-group">
           <label class="form-label" for="emailText">Email</label>
-          <input class="form-control" id="emailText" type="email" name="email" placeholder="Email" required>
+          <input class="form-control" id="emailText" type="email" name="_email" placeholder="Email" required>
         </div>
 
         <div class="form-group">
@@ -59,32 +59,41 @@
 
   $(document).ready(() => {
 
-    $.validator.addMethod("emailCheck", (value, element) => {
-      return false;
-    }, "Email already exists in records. It should be unique");
-    $("#sign-up-form").validate({
-      rules : { 
-        emailText : { emailCheck: true }
-      },
-      submitHandler: submitForm});
+    $.validator.addMethod(
+        "emailCheck",
+        async (value, element) => {
+          await isEmailUnique($("#email-text").val());
+          // var promise = new Promise(() => isEmailUnique($("#email-text").val()));
+          // promise.then(()=>console.log("message"));
+          console.log("ble");
+          return emailIsUnique;
+        },
+        "Email already exists in records. It should be unique"
+    );
 
-    $("#emailText").on("keyup", () => {
-      if(regexMatch($("#emailText").val())){
-        console.log("Regex match");
-        // isEmailUnique($("#email-text").val());
-      } else
-        console.log("No match");
+    $("#sign-up-form").validate(
+    {
+      rules : { 
+        _email : {
+          emailCheck: true
+        }
+      },
+      message : {
+        emailText : "Invalid email"
+      },
+      submitHandler: submitForm
     });
+
   });
 
   //Checks with database whether email is unique.
-  function isEmailUnique(email){
-    $.ajax({
+  async function isEmailUnique(email){
+    await $.ajax({
       url: "server/email-check.php",
       method: "POST",
       data: {email: $("#emailText").val()},
       success: (data, textStatus, jqXHR) => {
-        if(data["error"]){
+        if(data["error"] && data["error_number"] == 20){
           console.log(data["error_message"]);
           emailIsUnique = false;
           // return false;
