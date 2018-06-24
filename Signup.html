@@ -32,7 +32,7 @@
 
         <div class="form-group">
           <label class="form-label" for="emailText">Email</label>
-          <input class="form-control" id="emailText" type="email" name="_email" placeholder="Email" required>
+          <input class="form-control" id="emailText" type="email" name="_email" placeholder="Email">
         </div>
 
         <div class="form-group">
@@ -52,7 +52,7 @@
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script> -->
 <script src="dependencies/bootstrap.min.js"></script>
 <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script> -->
-<script src="jquery-validation-1.17.0/dist/jquery.validate.js"></script>
+<script src="jquery-validation-1.17.0/dist/jquery.validate.min.js"></script>
 
 <script type="text/javascript">
   var emailIsUnique = false;
@@ -60,9 +60,9 @@
   $(document).ready(() => {
 
     $.validator.addMethod(
-        "emailCheck",
-        async (value, element) => {
-          await isEmailUnique($("#email-text").val());
+        "emailCheck1",
+        (value, element) => {
+          isEmailUnique();
           // var promise = new Promise(() => isEmailUnique($("#email-text").val()));
           // promise.then(()=>console.log("message"));
           console.log("ble");
@@ -71,15 +71,22 @@
         "Email already exists in records. It should be unique"
     );
 
+    var emailCheckFunc = async (value, element) => {
+      await isEmailUnique();
+      console.log("ble");
+      return false;
+    }
+
     $("#sign-up-form").validate(
     {
-      rules : { 
+      rules : {
         _email : {
-          emailCheck: true
+          emailCheck1: true,
+          required: true
         }
       },
-      message : {
-        emailText : "Invalid email"
+      message: {
+        _email: "Invalid email"
       },
       submitHandler: submitForm
     });
@@ -87,7 +94,7 @@
   });
 
   //Checks with database whether email is unique.
-  async function isEmailUnique(email){
+  async function isEmailUnique(){
     await $.ajax({
       url: "server/email-check.php",
       method: "POST",
