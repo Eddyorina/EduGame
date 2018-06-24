@@ -1,6 +1,6 @@
 <?php
 
-require_once "SignUp.php";
+require_once "SignUpUtility.php";
 
 if(isset($_POST["firstname"]) && 
 	isset($_POST["lastname"]) &&
@@ -11,7 +11,9 @@ if(isset($_POST["firstname"]) &&
 	$signup->emailUnique($_POST["email"]);
 } else {
 	//replace below code
-	echo "parameter not set";
+	$response["error"] = true;
+	$response["error_message"] = "parameter not set";
+	echo json_encode($response);
 }
 
 ?>
