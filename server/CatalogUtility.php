@@ -14,7 +14,13 @@ class CatalogUtility {
         if ($query = $this->conn->prepare($sql)){
             if($query->execute()){
                 $response["error"] = false;
-                $response["games"] = $query->get_result()->fetch_assoc();
+
+                $result = $query->get_result();
+                $row = array();
+                while($r = $result->fetch_assoc()){
+                    $row[] = $r;
+                }
+                $response["games"] = $row;
                 echo json_encode($response);
             } else {
                 $response["error"] = true;
