@@ -12,8 +12,8 @@
 </head>
 <body>
 	
-	<nav class="navbar navbar-dark bg-dark navbar-expand-lg">
-		<a class="navbar-brand heading" style="font-size: 25px" href="#">EduGame</a>
+	<nav class="navbar navbar-dark bg-dark navbar-expand-lg m-b-30" style="margin-bottom: 30px;">
+		<a class="navbar-brand heading" style="font-size: 25px;" href="#">EduGame</a>
 		<div class="collapse navbar-collapse justify-content-end mr-3" id="navbarNavDropdown">
 			<ul class="navbar-nav">
 				<li class="nav-item dropdown">
@@ -32,9 +32,75 @@
 				<button class="btn btn-primary my-2 my-sm-0" type="submit">Search</button>
 			</form>
 		</div>
-		
 	</nav>
 
+	<div class="container font-weight-bold">New Games</div>
+	<div id="root" class="h-20">
+	</div>
+
+	<!-- <div id="blue">
+	<div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
+		<div class="container carousel-inner">
+			
+			<a class="carousel-item" href="#">las;kfj;lakfj;lkfj;ksadjf;ljkf</a>
+			<div class="carousel-item active">
+				<div class="row">
+					<div class="col-lg-2">
+						<div class="card">
+							<img class="card-img-top" src="http://i.imgur.com/EW5FgJM.png" alt="Card image cap">
+							<div class="card-body">
+								<div class="card-title">Johntez</div>
+								<div class="card-text">Lalalaland</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-2">
+						<div class="card">
+							<img class="card-img-top" src="http://i.imgur.com/EW5FgJM.png" alt="Card image cap">
+							<div class="card-body">
+								<div class="card-title">
+									Johntez
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col">Peter</div>
+				</div>
+			</div>
+			<div class="carousel-item">
+				<div class="row">
+					<div class="col-lg-2">
+						<div class="card">
+							<img class="card-img-top" src="http://i.imgur.com/EW5FgJM.png" alt="Card image cap">
+							<div class="card-body">
+								<div class="card-title">Johntez</div>
+								<div class="card-text">Lalalaland</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-2">
+						<div class="card">
+							<img class="card-img-top" src="http://i.imgur.com/EW5FgJM.png" alt="Card image cap">
+							<div class="card-body">
+								<div class="card-title">
+									Johntez
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col">Peter</div>
+				</div>
+			</div>
+			<div class="carousel-item">
+				<img class="d-block w-100" src="..." alt="Second slide">
+			</div>
+			<div class="carousel-item">
+				<img class="d-block w-100" src="..." alt="Third slide">
+			</div>
+		</div>
+	</div>
+</div>
+ -->
 	<script src="jquery-3.3.1.js"></script>
 	<script src="dependencies/popper.min.js"></script>
 	<script src="dependencies/bootstrap.min.js"></script>
@@ -48,31 +114,103 @@
 
 		$("#userMenuDropdown").text(firstname + " " + lastname);
 
+	</script>
+	<script type="text/babel">
 
-		function getNewGames(){
-			return new Promise(
-				() => {
-					$.ajax({
-						url: "server/CatalogUtility.php",
-						method: "POST",
-						data: {new_games: 1},
-						success: (data, textStatus, jqXHR) => {
-							if (!data[error]){
-								games = data["games"];
-							} else {
-								console.log(data["error_message"]);
-							}
-						},
-						error: (jqXHR, textStatus, errorThrown) => {
-							console.log(errorThrown);
-						},
-						dataType: "json"
-					})
+		var promise = new Promise((resolve, reject) => {
+			$.ajax({
+				url: "server/CatalogUtility.php",
+				method: "POST",
+				data: {new_games: 1},
+				success: (data, textStatus, jqXHR) => {
+					if (!data["error"]){
+						var newGames = data["games"];
+						console.log(newGames);
+						resolve(newGames);
+					} else {
+						console.log(data["error_message"]);
+					}
+				},
+				error: (jqXHR, textStatus, errorThrown) => {
+					console.log(errorThrown);
+				},
+				dataType: "json"
+			});
+		});
+
+		class GameCard extends React.Component {
+			render(){
+				return (
+					<div className="col-lg-2">
+						<div className="card" style={{height: "250px"}}>
+							<img className="card-img-top image-fluid d-block" src={this.props.thumbnail} alt={this.props.title}/>
+							<div className="card-body" >
+								<h5 className="card-title">{this.props.title}</h5>
+								<p className="card-text">{this.props.text}</p>
+							</div>
+						</div>
+					</div>
+				);
+			}	
+		}
+
+		class CarouselItemRow extends React.Component {
+
+			renderGameCard(game) {
+				return <GameCard thumbnail={game.thumbnail} title={game.name} text={game.subject} />;
+			}
+
+			//Four game-cards per carousel item
+			render() {
+				return (
+					<div className="carousel-item">
+						<div className="row">
+								{
+									this.props.games.map((game) => {
+										return this.renderGameCard(game);
+									})
+								}
+						</div>
+					</div>
+				);
+			}
+		}
+
+		class Carousel extends React.Component {
+			render() {
+				var dividedGames = [];
+				for (let i = 0; i < this.props.games.length; i++){
+					var temp = [];
+					for (; (i+1)%6 != 0 && (i+1) < this.props.games.length; i++){
+						temp.push(this.props.games[i]);
+					}
+					temp.push(this.props.games[i]);
+					dividedGames.push(temp);
 				}
-			);
-		};
+				console.log(dividedGames);
+				return (
+					<div id="newGamesCarousel" className="carousel slide" data-ride="carousel" data-interval="5000">
+						<div className="container carousel-inner">
+							{
+								dividedGames.map((fourGames) => {
+									return <CarouselItemRow games={fourGames} />;
+								})
+							}
+							<div className="carousel-item active">John</div>
+						</div>
+					</div>
+				);
+			}
 
-		getNewGames().then(()=>console.log(games));
+		}
+
+		promise.then((games) => {
+			console.log("Should now be rendering");
+			ReactDOM.render (
+				<Carousel games={games} />,
+				document.getElementById("root")
+			);
+		});
 	</script>
 		</body>
 </html>
