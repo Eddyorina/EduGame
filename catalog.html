@@ -21,7 +21,7 @@
 						User's name
 					</a>
 					<div class="dropdown-menu" aria-labelledby="userMenuDropdown">
-						<a class="dropdown-item" href="#">Log out</a>
+						<button class="dropdown-item" id="logout" href="#">Log out</button>
 					</div>
 				</li>
 			</ul>
@@ -35,8 +35,11 @@
 	</nav>
 
 	<div class="container font-weight-bold">New Games</div>
-	<div id="root" class="h-20">
+	<div id="newGames" class="h-20">
 	</div>
+
+	<div class="container font-weight-bold">Other Games</div>
+	<div id="games"></div>
 
 	<!-- <div id="blue">
 	<div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
@@ -114,6 +117,11 @@
 
 		$("#userMenuDropdown").text(firstname + " " + lastname);
 
+		$("#logout").on("click", () => {
+			localStorage.clear();
+			window.location.replace("login.html");
+		})
+
 	</script>
 	<script type="text/babel">
 
@@ -141,15 +149,16 @@
 		class GameCard extends React.Component {
 			render(){
 				return (
-					<div className="col-lg-2">
-						<div className="card" style={{height: "250px"}}>
+						<div className="card" /* style={{height: "250px"}} */>
 							<img className="card-img-top image-fluid d-block" src={this.props.thumbnail} alt={this.props.title}/>
 							<div className="card-body" >
 								<h5 className="card-title">{this.props.title}</h5>
 								<p className="card-text">{this.props.text}</p>
 							</div>
+							<div className="card-footer text-center">
+								<a className="btn btn-primary w-100" href="hellophaser.html">Play</a>
+							</div>
 						</div>
-					</div>
 				);
 			}	
 		}
@@ -163,13 +172,15 @@
 			//Four game-cards per carousel item
 			render() {
 				return (
-					<div className="carousel-item">
+					<div className={"carousel-item " + (this.props.first ? "active" : "")}>
 						<div className="row">
+							<div className="card-deck">
 								{
 									this.props.games.map((game) => {
 										return this.renderGameCard(game);
 									})
 								}
+							</div>
 						</div>
 					</div>
 				);
@@ -179,24 +190,24 @@
 		class Carousel extends React.Component {
 			render() {
 				var dividedGames = [];
-				for (let i = 0; i < this.props.games.length; i++){
-					var temp = [];
-					for (; (i+1)%6 != 0 && (i+1) < this.props.games.length; i++){
-						temp.push(this.props.games[i]);
+
+				for (let i=0; i<this.props.games.length; i+=6){
+					let t = [], n = 0;
+					for (let j=0; j<6; j++){
+						t.push(i+j+1>this.props.games.length ? 
+							this.props.games[n++] : this.props.games[i+j]);
 					}
-					temp.push(this.props.games[i]);
-					dividedGames.push(temp);
+					dividedGames.push(t);
 				}
-				console.log(dividedGames);
+
 				return (
-					<div id="newGamesCarousel" className="carousel slide" data-ride="carousel" data-interval="5000">
+					<div id="newGamesCarousel" className="carousel slide" data-ride="carousel" data-interval="7000">
 						<div className="container carousel-inner">
 							{
-								dividedGames.map((fourGames) => {
-									return <CarouselItemRow games={fourGames} />;
+								dividedGames.map((fourGames, n) => {
+									return <CarouselItemRow games={fourGames} first={n==0 ? true : false}/>;
 								})
 							}
-							<div className="carousel-item active">John</div>
 						</div>
 					</div>
 				);
@@ -208,9 +219,10 @@
 			console.log("Should now be rendering");
 			ReactDOM.render (
 				<Carousel games={games} />,
-				document.getElementById("root")
+				document.getElementById("newGames")
 			);
 		});
 	</script>
+	<script type="text/babel" src="js/catalog.js"></script>
 		</body>
 </html>
