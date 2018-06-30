@@ -11,15 +11,17 @@ class Login {
 	}
 
 	public function checkCredentials($email, $password){
-		$query = $this->connect->prepare("SELECT password FROM users WHERE email = ?");
+		$hashed_password = password_hash($password, PASSWORD_DEFAULT);
+		$query = $this->connect->prepare("SELECT * FROM users WHERE email = ?");
 		$query->bind_param("s", $email);
 		if($query->execute()) {
 			$result = $query->get_result();
 			$num_of_rows = $result->num_rows;
 			if($num_of_rows > 0){
 				$user = $result->fetch_assoc();
-				if($user["password"] === $password){
+				if(password_verify($password, $user["password"])){
 					$response["error"] = false;
+					$response["user"] = $user;
 				} else {
 					$response["error"] = true;
 					$response["error_message"] = "Incorrect password";
