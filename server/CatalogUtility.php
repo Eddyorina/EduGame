@@ -33,11 +33,34 @@ class CatalogUtility {
         }
     }
     
+    function get_games_as_per_subject(){
+        $sql = "SELECT * FROM games ORDER BY subject;";
+        $games;
+        if($query = $this->conn->prepare($sql)){
+            if($query->execute()){
+                $result_set = $query->get_result();
+                while($row = $result_set->fetch_assoc()){
+                    $games[$row["subject"]][] = $row;
+                }
+                $response["error"] = false;
+                $response["games"] = $games;
+            } else {
+                $response["error"] = true;
+                $response["error_message"] = $query->error;
+            }
+        } else {
+            $response["error"] = true;
+            $response["error_message"] = "Preparation error!";
+        }
+        echo json_encode($response);
+    }
 }
+
+$catalog_util = new CatalogUtility();
 
 if(isset($_POST["new_games"])){
-    $catalog_util = new CatalogUtility();
     $catalog_util->getNewGames();
+} elseif(isset($_POST["games"])){
+    $catalog_util->get_games_as_per_subject();
 }
-
 ?>
