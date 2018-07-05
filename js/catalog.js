@@ -28,7 +28,40 @@ promise.catch(errorThrown => console.log("The error: ", errorThrown))
 
 
 class GameCard1 extends React.Component {
+
+    constructor(props) {
+        super(props);
+    
+        this.deleteGame = this.deleteGame.bind(this);
+      }
+
+    deleteGame(){
+        console.log(this.props.gameId);
+        var promise = new Promise((resolve, reject) => {
+            $.ajax({
+                url: "server/admin.php",
+                method: "POST",
+                data: {deleteGame: this.props.gameId},
+                success: (data, textStatus, jqXHR) => {
+                    if (!data["error"]){
+                        location.reload(true);
+                    } else {
+                        console.log(data["error_message"]);
+                    }
+                },
+                error: (jqXHR, textStatus, errorThrown) => {
+                    reject(errorThrown);
+                },
+                dataType: "json"
+            })
+        });
+        promise.then(() => location.reload(true));
+        console.log("clicked");
+    }
+
     render() {
+        var privilege = localStorage.getItem("privilege");
+        console.log("Inside return:", this.props.gameId);
         return (
             <div className="card mx-2 my-4 border-primary" style={{width: "12rem"}}>
                 <img className="card-img-top image-fluid d-block" src={this.props.thumbnail} alt={this.props.title}/>
@@ -38,6 +71,11 @@ class GameCard1 extends React.Component {
                 </div>
                 <div className="card-footer text-center">
                     <a className="btn btn-primary w-100" href={this.props.link}>Play</a>
+                    {privilege == "privileged" && 
+                        <button className="btn btn-danger w-100 mt-2" onClick={this.deleteGame}>
+                            Delete
+                        </button>
+                    }
                 </div>
             </div>
         );
@@ -62,6 +100,7 @@ class SubjectGames extends React.Component {
                                         thumbnail={game.thumbnail}
                                         title={game.name}
                                         link={game.link}
+                                        gameId={game.game_id}
                                     />
                                     </div>
                                 );
@@ -71,6 +110,7 @@ class SubjectGames extends React.Component {
                                     thumbnail={game.thumbnail}
                                     title={game.name}
                                     link={game.link}
+                                    gameId={game.game_id}
                                 />
                             );
                         })}
