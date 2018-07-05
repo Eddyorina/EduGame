@@ -25,13 +25,24 @@
             $(".error-message").text(data["error_message"]);
           }
           else{
+            if(data["user"]["type"] == "privileged"){
+              console.log("very privileged");
+              localStorage.setItem("privilege", "privileged");
+            } else {
+              console.log("not privileged");
+              localStorage.setItem("privilege", "normal");
+            }
             console.log("No error present");
             localStorage.setItem("userid", data["user"]["userID"]);
             localStorage.setItem("useremail", data["user"]["useremail"]);
             localStorage.setItem("firstname", data["user"]["firstname"]);
             localStorage.setItem("lastname", data["user"]["lastname"]);
             console.log($("#lastname-text").val());
-            window.location.href = "catalog.html";
+            if(data["user"]["type"] == "privileged"){
+              window.location.href = "admin-page.html";  
+            } else {
+              window.location.href = "catalog.html";
+            }
           }
         }, "json");
     });

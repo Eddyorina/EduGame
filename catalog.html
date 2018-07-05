@@ -13,6 +13,14 @@
 <body>
 	
 	<nav class="navbar navbar-dark bg-dark navbar-expand-lg m-b-30" style="margin-bottom: 30px;">
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#subjectsToggler" aria-controls="subjectsToggler" aria-expanded="false" aria-label="Show Subjects">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div id="subjectsToggler" class="collapse">
+			<div class="bg-secondary" style="height: 170px;">
+
+			</div>
+		</div>
 		<a class="navbar-brand heading" style="font-size: 25px;" href="#">EduGame</a>
 		<div class="collapse navbar-collapse justify-content-end mr-3" id="navbarNavDropdown">
 			<ul class="navbar-nav">
@@ -33,13 +41,15 @@
 			</form>
 		</div>
 	</nav>
+	
 
 	<div class="container font-weight-bold">New Games</div>
-	<div id="newGames" class="h-20">
+	<div id="newGames" class="h-20" style="margin-bottom: 70px">
 	</div>
+	<hr style="background-color: #aaacaf">
 
-	<div class="container font-weight-bold">Other Games</div>
-	<div id="games"></div>
+	<!-- <div class="container font-weight-bold">Other Games</div> -->
+	<div id="games" style="margin-top: 70px"></div>
 
 	<!-- <div id="blue">
 	<div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
@@ -122,6 +132,8 @@
 			window.location.replace("login.html");
 		})
 
+		console.log(localStorage.getItem("privilege"));
+
 	</script>
 	<script type="text/babel">
 
@@ -149,13 +161,13 @@
 		class GameCard extends React.Component {
 			render(){
 				return (
-						<div className="card" /* style={{height: "250px"}} */>
+						<div className="card border-primary" /* style={{height: "250px"}} */>
 							<img className="card-img-top image-fluid d-block" src={this.props.thumbnail} alt={this.props.title}/>
 							<div className="card-body" >
 								<h5 className="card-title">{this.props.title}</h5>
-								<p className="card-text">{this.props.text}</p>
 							</div>
 							<div className="card-footer text-center">
+								<p className="card-text text-right" >{this.props.text}</p>
 								<a className="btn btn-primary w-100" href="hellophaser.html">Play</a>
 							</div>
 						</div>
